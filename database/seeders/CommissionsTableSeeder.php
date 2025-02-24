@@ -33,10 +33,9 @@ class CommissionsTableSeeder extends Seeder
         // Crear registros de comisión
         for ($i = 0; $i < 50; $i++) {
             DB::table('commissions')->insert([
-                'aula' => 'Aula ' . $faker->numberBetween(1, 100),
-                'horario' => $faker->time('H:i') . ' - ' . $faker->time('H:i'),
-                'course_id' => $faker->randomElement($courseIds),
-                'professor_id' => $faker->randomElement($professorIds),
+                'aula' => 'Aula 27',
+                'horario' => '01:05 - 06:25',
+                'course_id' => 18,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

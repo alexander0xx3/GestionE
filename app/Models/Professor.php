@@ -12,7 +12,8 @@ class Professor extends Model
     protected $fillable = ['name', 'specialization'];
   
     public function commissions()
-    {
-        return $this->belongsToMany(Commission::class);
-    }
+{
+    return $this->belongsToMany(Commission::class, 'commission_professor');
+}
+
 }

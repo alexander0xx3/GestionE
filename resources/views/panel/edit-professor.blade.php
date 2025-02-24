@@ -4,14 +4,13 @@
 
 @section('contenido')
 
-
 @if ($errors->has('no_commission_asigned'))
     <div class="alert alert-danger">
         {{ $errors->first('no_commission_asigned')}}
     </div>
 @endif
 
-<h1 style="margin-bottom: 20;">Editando {{ $tipo}}</h1>
+<h1 style="margin-bottom: 20px;">Editando {{ $tipo}}</h1>
 
 <form action="{{ route('professors.update', $professor) }}" method="POST">
     @csrf
@@ -20,7 +19,7 @@
     @endif
 
     <div class="form-group">
-        <label for="name">ID</label>
+        <label for="id">ID</label>
         <input type="text" name="id" class="form-control" value="{{ old('id', $professor->id ?? '') }}" disabled>
     </div>
 
@@ -30,17 +29,16 @@
     </div>
 
     <div class="form-group">
-        <label for="email">Especialización</label>
+        <label for="specialization">Especialización</label>
         <input type="text" name="specialization" class="form-control" value="{{ old('specialization', $professor->specialization ?? '') }}" required>
     </div>
 
     <div class="form-group">
         <label for="commissions">Asignar {{ $tablaRelacion }}</label>
         <div id="data-container">
-            <!-- Contenedor para los select dinámicos -->
             @foreach($professor->commissions as $commission)
-                <div class="data-select-wrapper" style="display: flex; align-items: center; justify-content: space-between; ">
-                    <select name="commissions_id[]" class="form-control mb-2" required>
+                <div class="data-select-wrapper d-flex align-items-center justify-content-between mb-2">
+                    <select name="commissions_id[]" class="form-control" required>
                         <option value="" disabled selected>Seleccionar {{ $tablaRelacion }}</option>
                         @foreach($commissions as $commissionOption)
                             <option value="{{ $commissionOption->id }}" 
@@ -61,51 +59,50 @@
 </form>
 
 <a href="{{ url()->previous() }}">
-    <button class="btn btn-warning" >Volver</button>
+    <button class="btn btn-warning mt-2">Volver</button>
 </a>
 
+<a href="{{ route('logout') }}" 
+   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    <button class="btn btn-danger mt-3">Salir</button>
+</a>
 
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>
 
 @endsection
 
-
+@section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const dataContainer = document.getElementById('data-container');
-    const addDataButton = document.getElementById('add-data');
+        const dataContainer = document.getElementById('data-container');
+        const addDataButton = document.getElementById('add-data');
 
-    // Agregar nuevo selector de curso
-    addDataButton.addEventListener('click', function () {
-        const newDataWrapper = document.createElement('div');
-        newDataWrapper.classList.add('data-select-wrapper');
+        addDataButton.addEventListener('click', function () {
+            const newDataWrapper = document.createElement('div');
+            newDataWrapper.classList.add('data-select-wrapper', 'd-flex', 'align-items-center', 'justify-content-between', 'mb-2');
 
-        // Agregar estilos directamente al nuevo div
-        newDataWrapper.style.display = 'flex';
-        newDataWrapper.style.alignItems = 'center';
-        newDataWrapper.style.justifyContent = 'space-between';
-
-        newDataWrapper.innerHTML = `
-            <select name="commissions_id[]" class="form-control mb-2" required>
-                <option value="" disabled selected>Seleccionar {{ $tablaRelacion }}</option>
-                @foreach($commissions as $commissionOption)
-                    <option value="{{ $commissionOption->id }}" 
-                        {{ $commissionOption->id }}>
-                        {{ $commissionOption->aula .' ('. $commissionOption->horario .')' }}
-                    </option>
-                @endforeach
+            newDataWrapper.innerHTML = `
+                <select name="commissions_id[]" class="form-control" required>
+                    <option value="" disabled selected>Seleccionar {{ $tablaRelacion }}</option>
+                    @foreach($commissions as $commissionOption)
+                        <option value="{{ $commissionOption->id }}">
+                            {{ $commissionOption->aula }} ({{ $commissionOption->horario }})
+                        </option>
+                    @endforeach
                 </select>
-            <button type="button" class="btn btn-danger btn-sm remove-data">Eliminar</button>
-        `;
+                <button type="button" class="btn btn-danger btn-sm remove-data">Eliminar</button>
+            `;
 
-        dataContainer.appendChild(newDataWrapper);
-    });
+            dataContainer.appendChild(newDataWrapper);
+        });
 
-    // Eliminar un selector de curso
-    dataContainer.addEventListener('click', function (e) {
-        if (e.target.classList.contains('remove-data')) {
-            e.target.closest('.data-select-wrapper').remove();
-        }
+        dataContainer.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-data')) {
+                e.target.closest('.data-select-wrapper').remove();
+            }
         });
     });
-
 </script>
+@endsection

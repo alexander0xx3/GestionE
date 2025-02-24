@@ -18,9 +18,10 @@ class CreateCommissionsTable extends Migration
             $table->string('aula');
             $table->string('horario');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->foreignId('professor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('professor_id')->nullable()->constrained('professors')->onDelete('set null');
+// 🔹 Agregamos esta línea
             $table->timestamps();
-        });
+        });       
     }
 
     /**

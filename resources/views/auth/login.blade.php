@@ -1,64 +1,101 @@
-<?php
-use App\Http\Controllers\CalculationController;
-use App\Http\Controllers\CommissionController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\PanelController;
-use App\Http\Controllers\PDF_Controller;
-use App\Http\Controllers\ProfessorController;
-use App\Http\Controllers\SubjectController;
-use Illuminate\Support\Facades\Route;
-// use App\Models\Student;
-// use App\Models\Course;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar Sesión</title>
 
+    <!-- Agregar Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            background: url("{{ asset('images/bg.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
+        .login-container {
+            max-width: 400px;
+            background: rgba(0, 0, 0, 0.85); /* Fondo oscuro */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            color: white; /* Texto en blanco */
+            text-align: center;
+        }
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+        .login-container h3 {
+            color: #00ff99; /* Verde brillante */
+            font-weight: bold;
+        }
 
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+        }
 
-Route::get('/', [StudentController::class, 'index'])->name('home');//indico cula sera la ruta de inicio
-//Route::get('/students2', [StudentController::class, 'allStudents'])->name('students.section');//indico cula sera la ruta de inicio
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
 
-Route::get('/calculate', [CalculationController::class, 'showForm'])->name('calculate.form');
-Route::post('/calculate', [CalculationController::class, 'calculate'])->name('calculate.result');
+        .btn-primary {
+            background-color: #00ff99; /* Verde llamativo */
+            border: none;
+            font-weight: bold;
+        }
 
+        .btn-primary:hover {
+            background-color: #00cc77;
+        }
 
+        .btn-secondary {
+            background-color: #17a2b8; /* Verde-azulado */
+            border: none;
+            font-weight: bold;
+        }
 
-// ########## PANEL PERSONALIZADO PARA CADA ENTIDAD ##############
+        .btn-secondary:hover {
+            background-color: #138496;
+        }
+    </style>
+</head>
+<body>
 
-Route::get('/panel/{tipo}', [App\Http\Controllers\PanelController::class, 'index'])->name('panel.index');
-Route::get('/panel/{tipo}/{id}', [App\Http\Controllers\PanelController::class, 'show'])->name('panel.show');
+<div class="login-container">
+    <h3 class="mb-4">Iniciar Sesión</h3>
 
-Route::get('/edit/{tipo}/{id?}', [App\Http\Controllers\PanelController::class, 'edit'])->name('panel.edit');
-Route::get('/create/{tipo}', [App\Http\Controllers\PanelController::class, 'create'])->name('panel.create');   
-//Route::put('/update/{tipo}/{id}', [App\Http\Controllers\PanelController::class, 'update'])->name('panel.update');   
+    <!-- Formulario de Login -->
+    <form method="POST" action="{{ route('login') }}">
+        @csrf
 
+        <!-- Campo Email -->
+        <div class="mb-3">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
 
-    Route::resource('students', StudentController::class);
-    Route::resource('courses', CourseController::class);
-    Route::resource('professors', ProfessorController::class);
-    Route::resource('subjects', SubjectController::class);
-    Route::resource('commissions', CommissionController::class);
+        <!-- Campo Contraseña -->
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
 
+        <!-- Botón de Ingresar -->
+        <button type="submit" class="btn btn-primary w-100 mb-2">Ingresar</button>
 
-    Route::get('/blog', function () {
-        return view('nueva_vista.blog'); // Muestra la vista del blog
-    });
-    
-    Route::get('/contacto', function () {
-        return view('nueva_vista.contacto'); // Muestra la vista de contacto
-    });
+        <!-- Botón de Registro -->
+        <a href="{{ route('register') }}" class="btn btn-secondary w-100" target="_blank">Registrar Nuevo Usuario</a>
+    </form>
+</div>
 
-    Route::get('/filtrar/{entidad}', [App\Http\Controllers\consultasController::class, 'FiltrarEntidad'])->name('entity.filter');
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-Route::get('/exportar/{tipo}', [PDF_Controller::class, 'exportToPdf'])->name('export.pdf');
+</body>
+</html>

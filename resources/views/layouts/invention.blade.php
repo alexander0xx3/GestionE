@@ -23,13 +23,13 @@
           <li><a href="{{ route('panel.index', 'Profesores') }}">Profesores</a></li>          
           <li><a href="{{ route('panel.index', 'Materias') }}">Materias</a></li>
           <li><a href="{{ route('panel.index', 'Cursos') }}">Cursos</a></li>
-          <li><a href="{{ route('panel.index', 'Comisiones') }}">Comisiones</a></li>
+          <li><a href="{{ route('panel.index', 'Comisiones') }}">Asignacion</a></li>
         </ul>
       </div>
     </div>
     <div id="mainimg">
-      <h3>Sistema de Gestión Escolar en Laravel</h3>
-      <h4>S</h4>
+      <h3>Gestión Escolar</h3>
+      <h4></h4>
     </div>
     <div id="contentarea">
       <div id="leftbar">
@@ -42,20 +42,20 @@
           <a href="javascript:history.back()"> Volver </a> <br>
           <a href="{{ url()->previous() }}">Regresar</a>
          </p>
-        <p><span class="orangetext">29/11/2024</span><br />
-          Los estudiantes de Laboratorio de Computación 4 (2024) de la UTN FRRe desarrollaron una novedosa calculadora.
+        <p><span class="orangetext">14/02/2025</span><br />
+          Los estudiantes de Laboratorio de Computación (2025) de la continental desarrollaron una novedosa calculadora.
           <a href="{{ action([App\Http\Controllers\CalculationController::class, 'showForm']) }}">Click aquí</a>
           <br />
           <br />
-          <span class="orangetext">10/08/2006</span><br />
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Utid anisl nec leo congue fringilla. <br />
+          <span class="orangetext">24/05/2025</span><br />
+          Evalucion final de la asignatura Prueba y Calidad de Software. <br />
           <br />
-          <span class="orangetext">28/07/2006</span><br />
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Utid anisl nec leo congue fringilla. </p>
+          <span class="orangetext">02/03/2025</span><br />
+          Se organizara un pichanga con los alumnos del DR. MAGLIONI ARANA CAPARACHIN  </p>
       </div>
     </div>
     <div id="bottom">
-      <div id="email"><a href="mailto:info@yourcompany.com">info@yourcompany.com</a></div>
+      <div id="email"><a href="mailto:info@yourcompany.com">Prueba y calidad de Software</a></div>
       <div id="validtext">
         <p><a href="{{ url('/blog') }}">Blog</a> | <a href="{{ url('/contacto') }}">Contacto</a></p>
       </div>

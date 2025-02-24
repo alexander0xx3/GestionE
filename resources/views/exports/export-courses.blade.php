@@ -5,7 +5,7 @@
 
     <div style="position: absolute; top: 7%; left: 37%; transform: translate(-50%, -50%); 
         color: black; font-size: 20px; font-weight: bold; width: 100%">
-        <h3>Sistema de Gestión Escolar en Laravel</h3>
+        <h3>Gestión Escolar</h3>
         <h4>aea</h4>
     </div>
 

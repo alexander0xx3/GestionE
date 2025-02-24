@@ -12,8 +12,8 @@ class ProfessorController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'specialization' => 'required|string|max:255',
-            'commissions_id' => 'required|array', // Validar que sea un array
-            'commissions_id.*' => 'exists:commissions,id', // Validar que cada comisión exista
+            'commissions_id' => 'nullable|array', // Permitir que sea nulo
+            'commissions_id.*' => 'exists:commissions,id', 
         ]);
 
         // Crear el profesor
@@ -22,8 +22,10 @@ class ProfessorController extends Controller
             'specialization' => $validated['specialization'],
         ]);
 
-        // Asignar la comisión al profesor en la tabla pivote
-        $professor->commissions()->attach($validated['commissions_id']);
+        // Verificar si hay comisiones antes de adjuntar
+        if (!empty($validated['commissions_id'])) {
+            $professor->commissions()->attach($validated['commissions_id']);
+        }
 
         return redirect()->route('panel.index', 'Profesores')->with('success','Profesor creado correctamente.');
     }
@@ -40,16 +42,17 @@ class ProfessorController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'specialization' => 'sometimes|string|max:255',
+            'commissions_id' => 'nullable|array',
+            'commissions_id.*' => 'exists:commissions,id',
         ]);
+
         $professor->update($validated);
 
-        $comissionsIds = $request->input('commissions_id'); // Obtén solo los IDs de los cursos
-
-        // Verifica si es un array válido antes de sincronizar
-        if (is_array($comissionsIds)) {
-            $professor->commissions()->sync($comissionsIds); // Sincroniza los cursos seleccionados
+        // Verificar si se enviaron comisiones
+        if (!empty($validated['commissions_id'])) {
+            $professor->commissions()->sync($validated['commissions_id']);
         } else {
-            return redirect()->back()->withErrors(['no_commission_asigned' => 'Debes seleccionar al menos una comisión.']);
+            $professor->commissions()->detach(); // Quitar todas si no se selecciona ninguna
         }
 
         return redirect()->route('panel.show', ['tipo'=>'Profesores', 'id'=>$professor->id])->with('success','Profesor actualizado correctamente.');

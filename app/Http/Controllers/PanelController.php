@@ -158,8 +158,9 @@ class PanelController extends Controller
 
             case 'Comisiones':
                 $data = Commission::with(['course', 'professors', 'mainProfessor'])
-                                    ->findOrFail($id);
-                break;
+                                    ->orderBy('created_at', 'desc')
+                                    ->paginate(12);
+                    break;
 
             default:
                 abort(404, 'Tipo de recurso no encontrado.');

@@ -19,12 +19,13 @@ DB::table('courses')->insert([
     // Supongamos que ya tienes materias en la tabla `subjects`
     $subjectIds = DB::table('subjects')->pluck('id');
             foreach (range(1, 20) as $index) { // Genera 20 cursos
-            DB::table('courses')->insert([
-            'name' => $faker->word . ' ' . $faker->randomNumber(3),
-            'subject_id' => $faker->randomElement($subjectIds), // Asigna un ID de `subject` aleatorio
-            'created_at' => $faker->dateTimeBetween('-1 year', 'now'),
-            'updated_at' => now(),
-            ]);
+                DB::table('courses')->insert([
+                    'name' => 'Matemáticas', // NO 'nombre'
+                    'descripcion' => 'Curso básico de matemáticas',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                
             }
         }
 

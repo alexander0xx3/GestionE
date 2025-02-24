@@ -1,3 +1,4 @@
+
 @extends('layouts.invention')
 
 @section('titulo', 'Registrar '. $tipo )

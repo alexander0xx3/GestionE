@@ -1,4 +1,7 @@
-<?php
+<?php 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalculationController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\StudentController;
@@ -7,58 +10,52 @@ use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PDF_Controller;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\SubjectController;
-use Illuminate\Support\Facades\Route;
-// use App\Models\Student;
-// use App\Models\Course;
-
-
-
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
 
+// 📌 Redirección a login si acceden a la raíz
+Route::get('/', function () {
+    return redirect()->route('login');
+})->name('home');
 
-Route::get('/', [StudentController::class, 'index'])->name('home');//indico cula sera la ruta de inicio
-//Route::get('/students2', [StudentController::class, 'allStudents'])->name('students.section');//indico cula sera la ruta de inicio
+// 📌 Rutas de autenticación
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/calculate', [CalculationController::class, 'showForm'])->name('calculate.form');
-Route::post('/calculate', [CalculationController::class, 'calculate'])->name('calculate.result');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 
+// 📌 Rutas protegidas para usuarios autenticados
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', function () {
+        return view('home'); // Redirige a home.blade.php
+    })->name('home');
 
+    // 📌 Panel de administración
+    Route::get('/panel/create/{tipo}', [PanelController::class, 'create'])->name('panel.create'); // ✅ Ruta agregada
+    Route::get('/panel/{tipo}', [PanelController::class, 'index'])->name('panel.index');
+    Route::get('/panel/{tipo}/{id}', [PanelController::class, 'show'])->name('panel.show');
+    Route::get('/edit/{tipo}/{id?}', [PanelController::class, 'edit'])->name('panel.edit');
 
-// ########## PANEL PERSONALIZADO PARA CADA ENTIDAD ##############
-
-Route::get('/panel/{tipo}', [App\Http\Controllers\PanelController::class, 'index'])->name('panel.index');
-Route::get('/panel/{tipo}/{id}', [App\Http\Controllers\PanelController::class, 'show'])->name('panel.show');
-
-Route::get('/edit/{tipo}/{id?}', [App\Http\Controllers\PanelController::class, 'edit'])->name('panel.edit');
-Route::get('/create/{tipo}', [App\Http\Controllers\PanelController::class, 'create'])->name('panel.create');   
-//Route::put('/update/{tipo}/{id}', [App\Http\Controllers\PanelController::class, 'update'])->name('panel.update');   
-
-
+    // 📌 Recursos
     Route::resource('students', StudentController::class);
     Route::resource('courses', CourseController::class);
     Route::resource('professors', ProfessorController::class);
     Route::resource('subjects', SubjectController::class);
     Route::resource('commissions', CommissionController::class);
+});
 
-
-    Route::get('/blog', function () {
-        return view('nueva_vista.blog'); // Muestra la vista del blog
-    });
-    
-    Route::get('/contacto', function () {
-        return view('nueva_vista.contacto'); // Muestra la vista de contacto
-    });
-
-    Route::get('/filtrar/{entidad}', [App\Http\Controllers\consultasController::class, 'FiltrarEntidad'])->name('entity.filter');
-
+// 📌 Funcionalidades Extra
+Route::get('/calculate', [CalculationController::class, 'showForm'])->name('calculate.form');
+Route::post('/calculate', [CalculationController::class, 'calculate'])->name('calculate.result');
 Route::get('/exportar/{tipo}', [PDF_Controller::class, 'exportToPdf'])->name('export.pdf');
+Route::get('/filtrar/{entidad}', [App\Http\Controllers\consultasController::class, 'FiltrarEntidad'])->name('entity.filter');
+
+// 📌 Páginas adicionales
+Route::view('/blog', 'nueva_vista.blog');
+Route::view('/contacto', 'nueva_vista.contacto');
